@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements a **Generative AI–powered Multi-Agent System** that enables natural language interaction with both structured and unstructured data.
+This project implements a **Generative AI powered Multi-Agent System** that enables natural language interaction with both structured and unstructured data.
 
 The system helps customer support executives retrieve:
 
@@ -83,4 +83,85 @@ SQL Database          Vector DB
 ---
 
 ## Project Structure
+```text
+Customer-Service-ChatBot/
+│
+├── agents/
+│   ├── __init__.py
+│   ├── router_bot.py          # LangGraph router (decides SQL vs RAG)
+│   ├── sql_agent.py           # Handles structured SQL queries
+│   └── pdf_ingest.py          # Handles PDF retrieval (Vector DB)
+│
+├── mcp_server/
+│   ├── __init__.py
+│   └── server.py              # MCP server exposing `chat()` tool
+│
+├── data/
+│   ├── policy_docs/           # Company policy PDFs
+│
+├── db/             
+│  ├── customer_support.db     # SQL database (structured data)
+   ├── chroma_policies         # Vector DB
+   ├── check_db.py             # check structured database 
+   ├── init_db.py              # structured database creation
+   └── seed_db.py              # sql data input
+│  
+├── app.py                     # Streamlit frontend UI
+├── requirements.txt           # Project dependencies
+├── README.md                  # Project documentation
+└── .env                       # Environment variables (API keys)
+```
 
+## Installation
+### Clone the Repository
+```Bash
+git clone <your-repository-url>
+cd Customer-Service-ChatBot
+```
+### Create a Virtual Environment
+- macOS / Linux
+```Bash
+python3 -m venv venv
+source venv/bin/activate
+```
+- Windows
+```Bash
+python -m venv venv
+venv\Scripts\activate
+```
+### Install Dependencies
+```Bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### Configure Environment Variables
+Create a .env file in the project root:
+```Bash
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+## Running the Application
+### Start MCP Server
+```bash
+uvicorn mcp_server.server:app --host 127.0.0.1 --port 8000
+```
+
+### Start Streamlit UI
+```bash
+streamlit run app.py
+```
+
+### Open URL
+http://localhost:8501
+
+## Demo
+video URL: 
+
+### Future Improvements
+
+- Authentication & role-based access control
+- Persistent memory
+- Logging & monitoring
+- Cloud deployment (AWS / GCP / Azure)
+- Multi-user session management
