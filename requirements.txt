@@ -1,0 +1,10 @@
+streamlit
+langchain
+langgraph
+langchain-huggingface
+langchain-community
+chromadb
+pypdf
+sqlalchemy
+python-dotenv
+MCP 
