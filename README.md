@@ -158,7 +158,7 @@ http://localhost:8501
 ## Demo
 video URL: 
 
-### Future Improvements
+## Future Improvements
 
 - Authentication & role-based access control
 - Persistent memory
