@@ -1,20 +1,22 @@
 import sys
 from pathlib import Path
 
-# Make project root importable (so "import agents..." works in mcp dev)
+# Allow imports from project root
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from mcp.server.fastmcp import FastMCP
 from agents.router_bot import answer
 
-mcp = FastMCP("Customer Support Chatbot")
+# Create MCP server
+mcp = FastMCP("Customer Service Chatbot")
 
 @mcp.tool()
 def chat(question: str) -> str:
-    """Answer questions using SQL + PDF RAG routed by LangGraph."""
+    """Route to SQL or RAG agent and return answer."""
+    if not question.strip():
+        return "Please ask a valid question."
     return answer(question)
 
-if __name__ == "__main__":
-    mcp.run()
-    
+# 👇 This creates HTTP ASGI app
+app = mcp.streamable_http_app()
