@@ -8,7 +8,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from mcp.server.fastmcp import FastMCP
 from agents.router_bot import answer
 
-# Create MCP server
+# MCP server
 mcp = FastMCP("Customer Service Chatbot")
 
 @mcp.tool()
@@ -18,5 +18,5 @@ def chat(question: str) -> str:
         return "Please ask a valid question."
     return answer(question)
 
-# 👇 This creates HTTP ASGI app
+# creates HTTP ASGI app
 app = mcp.streamable_http_app()

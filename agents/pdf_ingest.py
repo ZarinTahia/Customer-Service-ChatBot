@@ -6,7 +6,7 @@ from langchain_community.vectorstores import Chroma
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
-Data_Path = "data/policies"          # put PDFs here
+Data_Path = "data/policies"          # PDFs 
 CHROMA_PATH = "db/chroma_policies"   # vector DB saved here
 
 # 1) Load PDFs

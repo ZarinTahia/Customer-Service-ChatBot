@@ -156,7 +156,7 @@ streamlit run app.py
 http://localhost:8501
 
 ## Demo
-video URL: 
+video URL: https://www.loom.com/share/8c81d7e893aa44b2bea83a3bfa621d31 
 
 ## Future Improvements
 

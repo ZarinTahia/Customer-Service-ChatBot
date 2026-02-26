@@ -20,12 +20,12 @@ def answer_pdf(question: str) -> str:
     )
     retriever = vectordb.as_retriever(search_kwargs={"k": 4})
 
-    # ✅ Groq chat model (replaces HuggingFaceEndpoint + ChatHuggingFace)
+    # Groq chat model 
     llm = ChatGroq(
         model="llama-3.1-8b-instant",
         temperature=0.4,
         max_tokens=256,
-        api_key=os.getenv("GROQ_API_KEY"),  # optional if env var is set
+        api_key=os.getenv("GROQ_API_KEY"),  # env var is set
     )
 
     prompt = ChatPromptTemplate.from_template("""

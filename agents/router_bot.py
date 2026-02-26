@@ -12,14 +12,14 @@ from agents.sql_agent import answer_question as answer_sql
 from agents.pdf_qa import answer_pdf
 
 
-# ---------- State ----------
+# State 
 class BotState(TypedDict):
     question: str
     route: Literal["sql", "pdf", "clarify"]
     answer: str
 
 
-# ---------- LLM Router (Groq) ----------
+# LLM Router (Groq) 
 router_llm = ChatGroq(
     model="llama-3.1-8b-instant",
     temperature=0.0,          # routing should be deterministic
@@ -86,7 +86,7 @@ def next_step(state: BotState) -> str:
     return state["route"]
 
 
-# ---------- Build LangGraph ----------
+# LangGraph 
 graph = StateGraph(BotState)
 graph.add_node("router", router_node)
 graph.add_node("clarify", clarify_node)
@@ -107,13 +107,13 @@ graph.add_edge("clarify", END)
 app = graph.compile()
 
 
-# ---------- Convenience function for UI ----------
+# Convenience function for UI 
 def answer(question: str) -> str:
     out = app.invoke({"question": question, "route": "sql", "answer": ""})
     return out["answer"]
 
 
-# ---------- CLI test ----------
+# test 
 if __name__ == "__main__":
     tests = [
         "Can you summarise the code of conduct?",

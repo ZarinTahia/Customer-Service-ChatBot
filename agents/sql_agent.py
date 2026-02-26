@@ -13,18 +13,18 @@ from langchain_community.utilities import SQLDatabase
 
 DB_PATH = Path("db/customer_support.db")
 
-# 1) DB schema helper (so we can show schema to the LLM)
+# DB schema helper
 db = SQLDatabase.from_uri(f"sqlite:///{DB_PATH}")
 
-# 2) Groq chat model (replacement for HuggingFace)
-# Make sure .env has: GROQ_API_KEY=...
+# Groq chat model
+
 llm = ChatGroq(
     model="llama-3.1-8b-instant",
     temperature=0.4,
     max_tokens=256,
 )
 
-# ---------- Prompt A: English -> SQL (ONLY SQL) ----------
+
 sql_prompt = ChatPromptTemplate.from_template("""
 You are an expert at converting English questions to SQL for a SQLite database.
 
@@ -41,7 +41,7 @@ Rules:
 Question: {question}
 """)
 
-# ---------- Prompt B: SQL rows -> English answer ----------
+
 answer_prompt = ChatPromptTemplate.from_template("""
 You are a helpful customer support assistant.
 
