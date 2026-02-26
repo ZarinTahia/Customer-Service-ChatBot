@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List, Tuple
 
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+from langchain_groq import ChatGroq
 from langchain_community.utilities import SQLDatabase
 
 DB_PATH = Path("db/customer_support.db")
@@ -16,16 +16,13 @@ DB_PATH = Path("db/customer_support.db")
 # 1) DB schema helper (so we can show schema to the LLM)
 db = SQLDatabase.from_uri(f"sqlite:///{DB_PATH}")
 
-# 2) HuggingFace chat model (Together provider, chat-only)
-endpoint = HuggingFaceEndpoint(
-    repo_id="mistralai/Mistral-7B-Instruct-v0.2",
-    provider="together",
-    task="conversational",
-    huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
-    temperature=0.1,
-    max_new_tokens=256,
+# 2) Groq chat model (replacement for HuggingFace)
+# Make sure .env has: GROQ_API_KEY=...
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    temperature=0.4,
+    max_tokens=256,
 )
-llm = ChatHuggingFace(llm=endpoint)
 
 # ---------- Prompt A: English -> SQL (ONLY SQL) ----------
 sql_prompt = ChatPromptTemplate.from_template("""
@@ -61,11 +58,9 @@ Rows: {rows}
 
 def extract_first_select(text: str) -> str:
     """Extract a SELECT statement from model output, and reject extra text."""
-    # Take first SELECT ... ; or SELECT ... end
     m = re.search(r"(SELECT[\s\S]*?;)", text, flags=re.IGNORECASE)
     if m:
         return m.group(1).strip()
-    # If no semicolon, try from SELECT to end
     m2 = re.search(r"(SELECT[\s\S]*)", text, flags=re.IGNORECASE)
     if m2:
         return m2.group(1).strip()
@@ -99,5 +94,5 @@ def answer_question(question: str) -> str:
     return ans_msg.content.strip()
 
 if __name__ == "__main__":
-    q = "Which city Zarin lives?"
+    q = "Which city Zarin Tahia lives?"
     print(answer_question(q))

@@ -5,7 +5,8 @@ import os
 from pathlib import Path
 
 from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings, HuggingFaceEndpoint, ChatHuggingFace
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 
 CHROMA_DIR = Path("db/chroma_policies")
@@ -19,15 +20,13 @@ def answer_pdf(question: str) -> str:
     )
     retriever = vectordb.as_retriever(search_kwargs={"k": 4})
 
-    endpoint = HuggingFaceEndpoint(
-        repo_id="mistralai/Mistral-7B-Instruct-v0.2",
-        provider="together",
-        task="conversational",
-        huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
-        temperature=0.1,
-        max_new_tokens=256,
+    # ✅ Groq chat model (replaces HuggingFaceEndpoint + ChatHuggingFace)
+    llm = ChatGroq(
+        model="llama-3.1-8b-instant",
+        temperature=0.4,
+        max_tokens=256,
+        api_key=os.getenv("GROQ_API_KEY"),  # optional if env var is set
     )
-    llm = ChatHuggingFace(llm=endpoint)
 
     prompt = ChatPromptTemplate.from_template("""
 Use only the context to answer the question.
@@ -50,3 +49,6 @@ Start the answer directly. No small talk.
 def main():
     question = "tell me about core principals?"
     print(answer_pdf(question))
+
+if __name__ == "__main__":
+    main()

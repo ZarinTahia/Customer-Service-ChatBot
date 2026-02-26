@@ -5,7 +5,7 @@ import os
 from typing import TypedDict, Literal
 
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+from langchain_groq import ChatGroq
 from langgraph.graph import StateGraph, END
 
 from agents.sql_agent import answer_question as answer_sql
@@ -15,22 +15,19 @@ from agents.pdf_qa import answer_pdf
 # ---------- State ----------
 class BotState(TypedDict):
     question: str
-    route: Literal["sql", "pdf"]
+    route: Literal["sql", "pdf", "clarify"]
     answer: str
 
 
-# ---------- LLM Router (Hugging Face) ----------
-router_endpoint = HuggingFaceEndpoint(
-    repo_id="mistralai/Mistral-7B-Instruct-v0.2",
-    provider="together",
-    task="conversational",
-    huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
-    temperature=0.0,
-    max_new_tokens=32,
+# ---------- LLM Router (Groq) ----------
+router_llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    temperature=0.0,          # routing should be deterministic
+    max_tokens=10,            # only need "sql" or "pdf"
+    api_key=os.getenv("GROQ_API_KEY"),  # optional if env var is set
 )
-router_llm = ChatHuggingFace(llm=router_endpoint)
 
-router_prompt = router_prompt = ChatPromptTemplate.from_template("""
+router_prompt = ChatPromptTemplate.from_template("""
 You are a routing assistant.
 
 Choose exactly ONE tool:
@@ -52,7 +49,7 @@ def router_node(state: BotState) -> BotState:
 
     # Guardrails: accept only valid labels
     if decision not in ("sql", "pdf", "clarify"):
-        # sensible fallback: vague -> clarify, policy-ish -> pdf, else sql
+        # sensible fallback: vague -> clarify, else sql
         if len(q.split()) <= 4:
             decision = "clarify"
         else:
@@ -68,8 +65,8 @@ def clarify_node(state: BotState) -> BotState:
         "1) total number of customers,\n"
         "2) recent ticket volume/priority,\n"
         "3) a specific customer’s profile?\n"
-        "4)Phone number of Zarin?\n"
-        "5)How many ticket Zarin bought?\n"
+        "4) Phone number of Zarin?\n"
+        "5) How many tickets Zarin bought?\n"
         "If it’s a specific customer, please tell me their name."
     )
     return {**state, "answer": followup}

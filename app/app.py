@@ -11,7 +11,7 @@ from agents.router_bot import answer
 st.set_page_config(page_title="Customer Support Chatbot", page_icon="💬")
 
 st.title("💬 Customer Support Chatbot")
-st.caption("SQL + PDF RAG routed by LangGraph (no keywords).")
+st.caption("Ask question only related to customer and company policies.")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
