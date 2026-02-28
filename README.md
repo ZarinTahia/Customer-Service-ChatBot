@@ -31,7 +31,7 @@ SQL Agent           RAG Agent              LLM
     |                    |
     v                    v
 SQL Database          Vector DB
-(SQLite)     (Chroma)
+(SQLite)                 (Chroma)
 
 ```
 ### Components
