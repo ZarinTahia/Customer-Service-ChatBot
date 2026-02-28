@@ -31,7 +31,7 @@ SQL Agent           RAG Agent              LLM
     |                    |
     v                    v
 SQL Database          Vector DB
-(SQLite/Postgres)     (Chroma/FAISS)
+(SQLite)     (Chroma)
 
 ```
 ### Components
@@ -71,11 +71,11 @@ SQL Database          Vector DB
 
 ## Technology Stack
 
-- **LLM:** OpenAI / compatible model
-- **Embeddings:** OpenAI / HuggingFace
+- **LLM:** GROQ
+- **Embeddings:** HuggingFace
 - **Frameworks:** LangChain, LangGraph
-- **Structured Data:** SQL Database (SQLite / PostgreSQL)
-- **Unstructured Data:** Vector DB (Chroma / FAISS)
+- **Structured Data:** SQL Database (SQLite)
+- **Unstructured Data:** Vector DB (Chroma)
 - **Server:** MCP (Model Context Protocol)
 - **UI:** Streamlit
 - **Backend Server:** FastMCP + Uvicorn
@@ -138,7 +138,7 @@ pip install -r requirements.txt
 ### Configure Environment Variables
 Create a .env file in the project root:
 ```Bash
-OPENAI_API_KEY=your_openai_api_key_here
+GROQ_API_KEY= "GROQ_API_KEY"
 ```
 
 ## Running the Application
