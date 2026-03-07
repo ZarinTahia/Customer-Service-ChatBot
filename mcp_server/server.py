@@ -19,4 +19,4 @@ def chat(question: str) -> str:
     return answer(question)
 
 # creates HTTP ASGI app
-app = mcp.streamable_http_app()
+app = mcp.streamable_http_app() 

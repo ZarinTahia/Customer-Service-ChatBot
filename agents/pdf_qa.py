@@ -29,16 +29,16 @@ def answer_pdf(question: str) -> str:
     )
 
     prompt = ChatPromptTemplate.from_template("""
-Use only the context to answer the question.
-If you don't know the answer from the context, say "I don't know."
+        Use only the context to answer the question.
+        If you don't know the answer from the context, say "I don't know."
 
-Context:
-{context}
+        Context:
+        {context}
 
-Question: {question}
+        Question: {question}
 
-Start the answer directly. No small talk.
-""".strip())
+        Start the answer directly. No small talk.
+        """.strip())
 
     docs = retriever.invoke(question)
     context = "\n\n".join([d.page_content for d in docs])

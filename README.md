@@ -76,9 +76,8 @@ SQL Database          Vector DB
 - **Frameworks:** LangChain, LangGraph
 - **Structured Data:** SQL Database (SQLite)
 - **Unstructured Data:** Vector DB (Chroma)
-- **Server:** MCP (Model Context Protocol)
+- **Server:** FastMCP (MCP) with Uvicorn
 - **UI:** Streamlit
-- **Backend Server:** FastMCP + Uvicorn
 
 ---
 
@@ -90,7 +89,8 @@ Customer-Service-ChatBot/
 │   ├── __init__.py
 │   ├── router_bot.py          # LangGraph router (decides SQL vs RAG)
 │   ├── sql_agent.py           # Handles structured SQL queries
-│   └── pdf_ingest.py          # Handles PDF retrieval (Vector DB)
+    ├── pdf_qa.py              # RAG 
+│   └── pdf_ingest.py          # Creates Vector DB
 │
 ├── mcp_server/
 │   ├── __init__.py
