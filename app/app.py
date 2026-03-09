@@ -4,7 +4,7 @@ import asyncio
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 
-MCP_URL = "http://127.0.0.1:8000/mcp"
+MCP_URL =  "http://127.0.0.1:8000/mcp"
 
 async def call_mcp(question: str):
     async with streamable_http_client(MCP_URL) as (read, write, _):

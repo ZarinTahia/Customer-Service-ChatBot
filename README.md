@@ -21,8 +21,6 @@ Streamlit UI
 MCP Server (HTTP)  [FastMCP + Uvicorn]
     |
     v
-LangGraph Router Agent
-    |
     +--------------------+--------------------+
     |                    |                    |
     v                    v                    v
@@ -37,8 +35,7 @@ SQL Database          Vector DB
 ### Components
 
 - **Streamlit** → User interface
-- **MCP Server** → Exposes `chat()` tool and orchestrates requests
-- **LangGraph Router Agent** → Decides which data source to use
+- **MCP Server** → Exposes `chat()` tool and orchestrates requests, Decides which data source to use
 - **SQL Database** → Stores structured customer data
 - **Vector Database** → Stores embedded company policy PDFs
 - **LLM** → Generates context-aware responses
@@ -60,10 +57,10 @@ SQL Database          Vector DB
 1. User submits a query via Streamlit.
 2. Streamlit sends the query to the MCP Server.
 3. MCP exposes a tool: `chat(question)`.
-4. The tool calls the LangGraph router agent.
-5. The router decides:
+4. MCP calls LLM to decides:
    - SQL Agent → For customer profile/ticket queries
    - RAG Agent → For policy/document queries
+   - both
 6. LLM generates final response.
 7. Response is returned to the UI.
 
@@ -73,7 +70,7 @@ SQL Database          Vector DB
 
 - **LLM:** GROQ
 - **Embeddings:** HuggingFace
-- **Frameworks:** LangChain, LangGraph
+- **Frameworks:** LangChain
 - **Structured Data:** SQL Database (SQLite)
 - **Unstructured Data:** Vector DB (Chroma)
 - **Server:** FastMCP (MCP) with Uvicorn
@@ -87,14 +84,13 @@ Customer-Service-ChatBot/
 │
 ├── agents/
 │   ├── __init__.py
-│   ├── router_bot.py          # LangGraph router (decides SQL vs RAG)
 │   ├── sql_agent.py           # Handles structured SQL queries
     ├── pdf_qa.py              # RAG 
 │   └── pdf_ingest.py          # Creates Vector DB
 │
 ├── mcp_server/
 │   ├── __init__.py
-│   └── server.py              # MCP server exposing `chat()` tool
+│   └── server.py              # MCP server exposing `chat()` tool, decides which tool to use
 │
 ├── data/
 │   ├── policy_docs/           # Company policy PDFs

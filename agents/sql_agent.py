@@ -46,9 +46,11 @@ answer_prompt = ChatPromptTemplate.from_template("""
 You are a helpful customer support assistant.
 
 Answer the user's question using ONLY the query results below.
+- Only return the specific information requested.
 - Do NOT show SQL.
+- Do NOT include unrelated columns.
 - If results are empty, say you couldn't find it in the database.
-- Be concise (1–4 sentences).
+- Be concise (1–2 sentences).
 
 Question: {question}
 
